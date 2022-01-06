@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 // routers
 const planetsRouter = require("./routes/planets/planets.route");
+const launchesRouter = require("./routes/launches/launches.route");
 
 const app = express();
 
@@ -18,9 +19,13 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.get("/", (req, res) => {
+// Register routes
+app.use(planetsRouter);
+app.use(launchesRouter);
+
+// After Api routes
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
-app.use(planetsRouter);
 
 module.exports = app;
