@@ -20,8 +20,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Register routes
-app.use(planetsRouter);
-app.use(launchesRouter);
+app.use("/planets", planetsRouter);
+app.use("/launches", launchesRouter);
 
 // After Api routes
 app.get("/*", (req, res) => {
