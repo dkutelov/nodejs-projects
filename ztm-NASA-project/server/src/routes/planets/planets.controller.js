@@ -1,8 +1,8 @@
 const { getAllPlanets } = require("../../models/planets/planets.model");
 
-function httpGetAllPlanets(req, res) {
+async function httpGetAllPlanets(req, res) {
   // return is not used by express - only to stop execution and not set res second time
-  return res.status(200).json(getAllPlanets());
+  return res.status(200).json(await getAllPlanets());
 }
 
 module.exports = {
