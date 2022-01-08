@@ -1,4 +1,7 @@
+const Launch = require("./launches.mongo");
+
 const launches = new Map(); // preserve the order of adding
+
 let latestFlightNumber = 100;
 
 const launch = {

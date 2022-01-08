@@ -5,7 +5,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 
 const app = require("./app");
-const { loadPlanetsData } = require("./models/planets.model");
+const { loadPlanetsData } = require("./models/planets/planets.model");
 
 const server = http.createServer(app);
 
