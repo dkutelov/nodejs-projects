@@ -71,7 +71,7 @@ async function saveLaunch(launch) {
 
   await launches.updateOne(
     {
-      flightNumber: launch.latestFlightNumber
+      flightNumber: launch.flightNumber
     },
     launch,
     {
@@ -83,13 +83,13 @@ async function saveLaunch(launch) {
 async function scheduleNewLaunch(launch) {
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
   const newLaunch = Object.assign(launch, {
-    customer: ["ZTM", "NASA"],
+    customers: ["ZTM", "NASA"],
     upcoming: true,
     success: true,
     flightNumber: newFlightNumber
   });
-  console.log(launch);
-  await saveLaunch(launch);
+  console.log(newLaunch);
+  await saveLaunch(newLaunch);
 }
 
 module.exports = {
