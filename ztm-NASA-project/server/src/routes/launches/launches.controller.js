@@ -2,11 +2,12 @@ const {
   getAllLaunches,
   createLaunch,
   existLaunchWithId,
-  deleteLaunch
+  deleteLaunch,
+  saveLaunch
 } = require("../../models/launches/launches.model");
 
-function httpGetAllLaunches(req, res) {
-  return res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  return res.status(200).json(await getAllLaunches());
 }
 
 function httpCreateLaunch(req, res) {
@@ -30,7 +31,7 @@ function httpCreateLaunch(req, res) {
   }
 
   launch.launchDate = new Date(launch.launchDate);
-  createLaunch(launch);
+  saveLaunch(launch);
 
   //good practice to return what was created
   return res.status(201).json(launch);
