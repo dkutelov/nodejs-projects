@@ -20,8 +20,9 @@ const DEFAULT_FLIGHT_NUMBER = 100;
 // use as key the field mostly used for search
 //launches.set(launch.flightNumber, launch);
 
-function existLaunchWithId(id) {
+async function existLaunchWithId(id) {
   //return launches.has(id);
+  return await launches.findOne({ flightNumber: id });
 }
 
 async function getLatestFlightNumber() {
@@ -40,24 +41,34 @@ async function getAllLaunches() {
   return await launches.find({}, { _id: 0, __v: 0 });
 }
 
-function createLaunch(launch) {
-  //latestFlightNumber++;
-  // const newLaunch = Object.assign(launch, {
-  //   flightNumber: latestFlightNumber,
-  //   customer: ["ZTM", "NASA"],
-  //   upcoming: true,
-  //   success: true
-  // });
-  // launches.set(latestFlightNumber, newLaunch);
-}
+//function createLaunch(launch) {
+//latestFlightNumber++;
+// const newLaunch = Object.assign(launch, {
+//   flightNumber: latestFlightNumber,
+//   customer: ["ZTM", "NASA"],
+//   upcoming: true,
+//   success: true
+// });
+// launches.set(latestFlightNumber, newLaunch);
+//}
 
-function deleteLaunch(id) {
+async function abortLaunch(launchFlightNumber) {
   //do not delete -> keep data
   // const aborted = launches.get(id);
   // aborted.upcoming = false;
   // aborted.success = false;
   // return aborted;
-  return {};
+  const aborted = await launches.updateOne(
+    {
+      flightNumber: launchFlightNumber
+    },
+    {
+      upcoming: false,
+      success: false
+    }
+  );
+
+  return aborted.acknowledged && aborted.modifiedCount === 1;
 }
 
 async function saveLaunch(launch) {
@@ -69,7 +80,8 @@ async function saveLaunch(launch) {
     throw new Error("No Planet found!");
   }
 
-  await launches.updateOne(
+  // await launches.updateOne - returns mongoose field as well
+  await launches.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber
     },
@@ -95,6 +107,6 @@ async function scheduleNewLaunch(launch) {
 module.exports = {
   getAllLaunches,
   existLaunchWithId,
-  deleteLaunch,
+  abortLaunch,
   scheduleNewLaunch
 };
