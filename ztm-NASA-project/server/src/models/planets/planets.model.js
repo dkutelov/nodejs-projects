@@ -28,7 +28,6 @@ function loadPlanetsData() {
         if (isHabitablePlanet(data)) {
           //upsert operation - only insert if they do not exist
           await savePlanet(data);
-          //habitablePlanets.push({ keplerName: data.kepler_name });
         }
       })
       .on("error", (err) => {
