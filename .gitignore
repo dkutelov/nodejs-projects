@@ -1,7 +1,11 @@
 
 ztm-NASA-project/server/data/kepler_data.csv
 ztm-NASA-project/server/public
+ztm-NASA-project/server/key.pem
+ztm-NASA-project/server/cert.pem
 .DS_Store
+ztm-auth/cert.pem
+ztm-auth/key.pem
 
 # Logs
 logs
