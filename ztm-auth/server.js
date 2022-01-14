@@ -42,7 +42,7 @@ passport.serializeUser((user, done) => {
 // Read the session from the cookie
 passport.deserializeUser((id, done) => {
   // User.findById(id).then(user => {
-  //   done(null, user);
+  //   done(null, user); //req.user will contain all user data from db
   // });
   done(null, id);
 });
@@ -65,6 +65,7 @@ app.use(passport.session());
 function checkLoggedIn(req, res, next) {
   console.log(req.user);
   const isLoggedIn = req.isAuthenticated() && req.user;
+  //isAuthenticated build in passport to check that user was authenticated
   if (!isLoggedIn) {
     return res.status(401).json({
       error: "You must log in!"
