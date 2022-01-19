@@ -6,16 +6,18 @@ const { loadFilesSync } = require('@graphql-tools/load-files');
 
 // Load all grapgql type files
 const typesArray = loadFilesSync(path.join(__dirname, '**/*.graphql'));
+const resolversArray = loadFilesSync(path.join(__dirname, '**/*.resolvers.js'));
 
 // Create schema
 const schema = makeExecutableSchema({
   typeDefs: typesArray,
+  resolvers: resolversArray,
 });
 
-const root = {
-  products: require('./products/products.model'),
-  orders: require('./orders/orders.model'),
-};
+// const root = {
+//   products: require('./products/products.model'),
+//   orders: require('./orders/orders.model'),
+// };
 
 const app = express();
 
@@ -24,7 +26,7 @@ app.use(
   '/graphql',
   graphqlHTTP({
     schema: schema,
-    rootValue: root,
+    //rootValue: root,
     graphiql: true, // enables graphical http://localhost:3000/graphql
   })
 );
