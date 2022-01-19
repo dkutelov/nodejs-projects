@@ -12,6 +12,18 @@ class Block {
   static genesis() {
     return new this(GENESIS_DATA);
   }
+
+  static mineBlock({ lastBlock, data }) {
+    const timestamp = Date.now();
+    const lastHash = lastBlock.hash;
+    const hash = "new hash";
+    return new this({
+      timestamp,
+      lastHash,
+      hash,
+      data
+    });
+  }
 }
 
 module.exports = Block;
