@@ -13,9 +13,15 @@ module.exports = {
       const max = args.max;
       return productsModel.getProductByPrice(min, max);
     },
-    productById: (_, args) => { 
+    productById: (_, args) => {
       const id = args.id;
       return productsModel.getProductById(id);
-    }
+    },
+  },
+  Mutation: {
+    addNewProduct: (_, args) => {
+      const { id, description, price } = args;
+      return productsModel.addNewProduct(id, description, price);
+    },
   },
 };

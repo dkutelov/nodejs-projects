@@ -23,4 +23,20 @@ function getProductById(id) {
   return products.find((p) => (p.id = id));
 }
 
-module.exports = { getAllProducts, getProductByPrice, getProductById };
+function addNewProduct(id, description, price) {
+  const newProduct = {
+    id,
+    description,
+    price,
+    reviews: [],
+  };
+  products.push(newProduct);
+  return newProduct;
+}
+
+module.exports = {
+  getAllProducts,
+  getProductByPrice,
+  getProductById,
+  addNewProduct,
+};
