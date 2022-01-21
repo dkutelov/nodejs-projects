@@ -34,9 +34,21 @@ function addNewProduct(id, description, price) {
   return newProduct;
 }
 
+function addNewProductReview(id, rating, comment) {
+  const product = products.find((p) => p.id === id);
+  const newReview = { rating, comment };
+  if (!product.reviews) {
+    product.reviews = [];
+  }
+  product.reviews.push(newReview);
+
+  return product;
+}
+
 module.exports = {
   getAllProducts,
   getProductByPrice,
   getProductById,
   addNewProduct,
+  addNewProductReview,
 };

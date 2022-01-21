@@ -23,5 +23,9 @@ module.exports = {
       const { id, description, price } = args;
       return productsModel.addNewProduct(id, description, price);
     },
+    addNewProductReview: (_, args) => {
+      const { id, rating, comment } = args;
+      return productsModel.addNewProductReview(id, rating, comment);
+    },
   },
 };
