@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     console.log('Player ready with id: ', socket.id);
     readyPlayerCount++;
 
-    if (readyPlayerCount === 2) {
+    if (readyPlayerCount % 2 === 0) {
       //broadcast start game event
       io.emit('startGame', socket.id); //second player becomes refferee
     }
@@ -37,5 +37,9 @@ io.on('connection', (socket) => {
   socket.on('ballMove', (ballData) => {
     // to all except who sent the data
     socket.broadcast.emit('ballMove', ballData);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('Server disconnected: ', reason);
   });
 });
