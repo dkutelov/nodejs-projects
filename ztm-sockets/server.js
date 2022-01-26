@@ -30,6 +30,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('paddleMove', (paddleData) => {
+    // to all except who sent the data
     socket.broadcast.emit('paddleMove', paddleData);
+  });
+
+  socket.on('ballMove', (ballData) => {
+    // to all except who sent the data
+    socket.broadcast.emit('ballMove', ballData);
   });
 });
