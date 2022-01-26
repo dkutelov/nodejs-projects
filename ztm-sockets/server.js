@@ -1,45 +1,25 @@
-const server = require('http').createServer();
+const http = require('http');
+const io = require('socket.io');
+
+const apiServer = require('./api');
+//const server = require('http').createServer(api);
 
 // https://socket.io/docs/v4/handling-cors/
-const io = require('socket.io')(server, {
-  cors: {
-    origin: '*',
-    method: ['GET', 'POST'],
-  },
-});
+// const io = require('socket.io')(server, {
+//   cors: {
+//     origin: '*',
+//     method: ['GET', 'POST'],
+//   },
+// });
+
+const httpServer = http.createServer(apiServer);
+const socketServer = io(httpServer);
+
+const sockets = require('./sockets');
 const PORT = 3000;
 
-server.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`🚀 Server listening on port ${PORT} ...`);
 });
 
-let readyPlayerCount = 0;
-
-// Every time client connects
-io.on('connection', (socket) => {
-  console.log('a user connected', socket.id);
-
-  socket.on('ready', () => {
-    console.log('Player ready with id: ', socket.id);
-    readyPlayerCount++;
-
-    if (readyPlayerCount % 2 === 0) {
-      //broadcast start game event
-      io.emit('startGame', socket.id); //second player becomes refferee
-    }
-  });
-
-  socket.on('paddleMove', (paddleData) => {
-    // to all except who sent the data
-    socket.broadcast.emit('paddleMove', paddleData);
-  });
-
-  socket.on('ballMove', (ballData) => {
-    // to all except who sent the data
-    socket.broadcast.emit('ballMove', ballData);
-  });
-
-  socket.on('disconnect', (reason) => {
-    console.log('Server disconnected: ', reason);
-  });
-});
+sockets.listen(socketServer);
