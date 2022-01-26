@@ -3,7 +3,7 @@ const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 
 const socket = io('http://localhost:3000');
-
+let isReferee = false;
 let paddleIndex = 0;
 
 let width = 500;
@@ -162,16 +162,24 @@ function animate() {
   window.requestAnimationFrame(animate);
 }
 
-// Start Game, Reset Everything
-function startGame() {
+// Load Game, Reset Everything
+function loadGame() {
   createCanvas();
   renderIntro();
+  socket.emit('ready');
+}
 
-  paddleIndex = 0;
+function startGame() {
+  paddleIndex = isReferee ? 0 : 1;
   window.requestAnimationFrame(animate);
   canvas.addEventListener('mousemove', (e) => {
     playerMoved = true;
     paddleX[paddleIndex] = e.offsetX;
+
+    socket.emit('paddleMove', {
+      xPosition: paddleX[paddleIndex],
+    });
+
     if (paddleX[paddleIndex] < 0) {
       paddleX[paddleIndex] = 0;
     }
@@ -184,4 +192,20 @@ function startGame() {
 }
 
 // On Load
-startGame();
+loadGame();
+
+socket.on('connect', () => {
+  console.log('Connected as...', socket.id);
+});
+
+socket.on('startGame', (refereeId) => {
+  console.log('Game started with referee: ', refereeId);
+  isReferee = socket.id === refereeId;
+  startGame();
+});
+
+socket.on('paddleMove', (paddleData) => {
+  // Toggle 1 into 0, and 0 into 1
+  const opponentPaddleIndex = 1 - paddleIndex;
+  paddleX[opponentPaddleIndex] = paddleData.xPosition;
+});
